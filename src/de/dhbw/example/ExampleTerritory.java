@@ -7,6 +7,7 @@ import java.util.Map;
 
 import de.dhbw.astar.AStar;
 import de.dhbw.datareader.DataReader;
+import de.dhbw.exceptions.NodeOutOfBoundsException;
 import de.dhbw.model.Node;
 import de.dhbw.model.TerritoryMap;
 
@@ -20,7 +21,7 @@ public class ExampleTerritory {
     /**
      * Runs the A*-Algorithm for some sample data.
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NodeOutOfBoundsException {
         DataReader dataReader = new DataReader();
         List<List<String>> matrix = dataReader.readMatrix(SAMPLE_DATA_LOCATION);
         Map<Integer, Integer> costsTable = dataReader.readCostsTable(SAMPLE_DATA_LOCATION);

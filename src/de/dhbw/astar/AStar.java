@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.dhbw.exceptions.NodeOutOfBoundsException;
 import de.dhbw.model.Node;
 import de.dhbw.model.TerritoryMap;
 
@@ -24,8 +25,14 @@ public class AStar {
      *            a {@link Node} that represents the goal
      * @return a list of {@link Node} objects that represents the shortest path. If no path is found, an empty list is
      *         returned.
+     * @throws NodeOutOfBoundsException
+     *             if one of the inserted nodes is not within the bounds of the territory map
      */
-    public List<Node> run(TerritoryMap territoryMap, Node startNode, List<Node> terminalNodes) {
+    public List<Node> run(TerritoryMap territoryMap, Node startNode, List<Node> terminalNodes)
+        throws NodeOutOfBoundsException {
+
+        territoryMap.checkNodeMembership(startNode);
+        territoryMap.checkNodeMembership(terminalNodes);
 
         territoryMap.reset(); // Make sure the territory map does not contain junk data
 

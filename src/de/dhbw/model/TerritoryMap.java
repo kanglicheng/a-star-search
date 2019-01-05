@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.dhbw.exceptions.NodeOutOfBoundsException;
+
 /**
  * A territory map basically consists of an array of Nodes that represents the whole territory.
  */
 public class TerritoryMap {
 
-    public Node[][] territoryMap;
+    private Node[][] territoryMap;
+    private int height;
+    private int width;
 
     /**
      * Returns the territory map.
@@ -30,10 +34,10 @@ public class TerritoryMap {
      * @return an array with the final territory map
      */
     public Node[][] initialize(List<List<String>> matrix, Map<Integer, Integer> costsTable) {
-        int heigth = matrix.size();
-        int width = matrix.get(0).size();
+        this.height = matrix.size();
+        this.width = matrix.get(0).size();
 
-        Node[][] territoryMap = new Node[heigth][width];
+        Node[][] territoryMap = new Node[this.height][this.width];
         for (int i = 0; i < territoryMap.length; i++) {
             for (int j = 0; j < territoryMap[i].length; j++) {
                 territoryMap[j][i] = new Node(i + 1, j + 1);
@@ -52,17 +56,15 @@ public class TerritoryMap {
      * @return a list of all neighbours
      */
     public List<Node> getNeighbours(Node node) {
-        int hight = this.territoryMap.length;
-        int width = this.territoryMap[0].length;
         List<Node> successors = new ArrayList<>();
 
-        if (node.getXCoordinate() + 1 <= width) {
+        if (node.getXCoordinate() + 1 <= this.width) {
             successors.add(this.territoryMap[node.getYCoordinate() - 1][node.getXCoordinate()]);
         }
         if (node.getXCoordinate() - 1 >= 1) {
             successors.add(this.territoryMap[node.getYCoordinate() - 1][node.getXCoordinate() - 2]);
         }
-        if (node.getYCoordinate() + 1 <= hight) {
+        if (node.getYCoordinate() + 1 <= this.height) {
             successors.add(this.territoryMap[node.getYCoordinate()][node.getXCoordinate() - 1]);
         }
         if (node.getYCoordinate() - 1 >= 1) {
@@ -80,6 +82,22 @@ public class TerritoryMap {
                 node.reset();
             }
         }
+    }
+
+    public void checkNodeMembership(Node startNode) throws NodeOutOfBoundsException {
+        if (startNode.getXCoordinate() < 1 || startNode.getXCoordinate() > this.width) {
+            throw new NodeOutOfBoundsException("The node is out of the bounds of the TerritoryMap " + startNode);
+        }
+        if (startNode.getYCoordinate() < 1 || startNode.getYCoordinate() > this.height) {
+            throw new NodeOutOfBoundsException("The node is out of the bounds of the TerritoryMap " + startNode);
+        }
+    }
+
+    public void checkNodeMembership(List<Node> terminalNodes) throws NodeOutOfBoundsException {
+        for (Node node : terminalNodes) {
+            this.checkNodeMembership(node);
+        }
+
     }
 
 }
