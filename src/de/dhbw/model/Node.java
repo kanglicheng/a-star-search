@@ -13,7 +13,6 @@ public class Node {
     private int xCoordinate;
     private int yCoordinate;
     private double gValue;
-    private double hValue;
     private double fValue;
     private int kValue;
     private List<Node> path;
@@ -71,6 +70,15 @@ public class Node {
     }
 
     /**
+     * Sets the fValue of a Node.
+     *
+     * @param fValue
+     */
+    public void setFValue(double fValue) {
+        this.fValue = fValue;
+    }
+
+    /**
      * Returns the k value of a Node.
      *
      * @return kValue
@@ -116,23 +124,10 @@ public class Node {
     }
 
     /**
-     * Calculates a heuristic function h that is used to estimate the cheapest costs to the terminal node.
-     *
-     * @param terminalNode
-     */
-    public void calculateHValue(Node terminalNode) {
-        double a = Math.abs(terminalNode.xCoordinate - this.xCoordinate) + 1;
-        double b = Math.abs(terminalNode.yCoordinate - this.yCoordinate) + 1;
-        this.hValue = Math.sqrt(a * a + b * b);
-        this.fValue = this.gValue + this.hValue;
-    }
-
-    /**
      * Resets the node by setting the g, h and f value to zero and resets the path.
      */
     public void reset() {
         this.gValue = 0;
-        this.hValue = 0;
         this.fValue = 0;
         this.resetPath();
     }

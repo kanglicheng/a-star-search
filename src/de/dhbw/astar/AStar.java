@@ -25,20 +25,21 @@ public class AStar {
      * @return a list of {@link Node} objects that represents the shortest path. If no path is found, an empty list is
      *         returned.
      */
-    public List<Node> run(TerritoryMap territoryMap, Node startNode, Node terminalNode) {
+    public List<Node> run(TerritoryMap territoryMap, Node startNode, List<Node> terminalNodes) {
 
         territoryMap.reset(); // Make sure the territory map does not contain junk data
 
         List<Node> openList = new ArrayList<>();
         List<Node> closedList = new ArrayList<>();
         openList.add(startNode);
-        startNode.calculateHValue(terminalNode);
+
+        startNode.setFValue(this.estimateCosts(startNode, terminalNodes));
 
         while (!openList.isEmpty()) {
             Node optimalNode = getNodeWithLowestFValue(openList);
             openList.remove(optimalNode);
             closedList.add(optimalNode);
-            if (optimalNode.equals(terminalNode)) {
+            if (terminalNodes.contains(optimalNode)) {
                 System.out.println("Found Solution!");
                 Collections.reverse(optimalNode.getPath());
                 return optimalNode.getPath();
@@ -46,21 +47,56 @@ public class AStar {
             double factor = calculatePathFactor(optimalNode.getPath());
             for (Node successor : territoryMap.getNeighbours(optimalNode)) {
                 double gValue = optimalNode.getGValue() + successor.getKValue() * factor;
+                double fValue = this.estimateCosts(successor, terminalNodes) + gValue;
                 if (!openList.contains(successor) && !closedList.contains(successor)) {
                     openList.add(successor);
                     successor.addToPath(optimalNode.getPath());
                     successor.setGValue(gValue);
-                    successor.calculateHValue(terminalNode);
+                    successor.setFValue(fValue);
                 } else if (openList.contains(successor) && !closedList.contains(successor)
                     && gValue < successor.getGValue()) {
                     successor.addToPath(optimalNode.getPath());
                     successor.setGValue(gValue);
-                    successor.calculateHValue(terminalNode);
+                    successor.setFValue(fValue);
                 }
             }
         }
         System.out.println("Found No Solution!");
         return new ArrayList<Node>();
+    }
+
+    /**
+     * Estimates the costs from the current node to the terminalNodes by calculating a heuristic function h for each
+     * terminal node and selecting the smallest value.
+     *
+     * @param currentNode
+     * @param terminalNodes
+     * @return hValue the estimated costs from the current node to the terminal nodes
+     */
+    private double estimateCosts(Node currentNode, List<Node> terminalNodes) {
+        double hValue = 0;
+        for (Node terminalNode : terminalNodes) {
+            double x = this.estimateCosts(currentNode, terminalNode);
+            if (x < hValue) {
+                hValue = x;
+            }
+        }
+        return hValue;
+    }
+
+    /**
+     * Estimates the costs from currentNode to terminalNode by calculating a heuristic function h with the the aid of
+     * the Pythagoras' theorem.
+     *
+     * @param currentNode
+     * @param terminalNode
+     * @return hValue the estimated costs from the current node to the terminal node
+     */
+    private double estimateCosts(Node currentNode, Node terminalNode) {
+        double a = Math.abs(currentNode.getXCoordinate() - terminalNode.getXCoordinate()) + 1;
+        double b = Math.abs(currentNode.getYCoordinate() - terminalNode.getYCoordinate()) + 1;
+        double hValue = Math.sqrt(a * a + b * b);
+        return hValue;
     }
 
     /**
