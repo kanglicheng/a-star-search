@@ -23,8 +23,8 @@ public class ExampleTerritory {
      */
     public static void main(String[] args) throws IOException, NodeOutOfBoundsException {
         DataReader dataReader = new DataReader();
-        List<List<String>> matrix = dataReader.readMatrix(SAMPLE_DATA_LOCATION);
-        Map<Integer, Integer> costsTable = dataReader.readCostsTable(SAMPLE_DATA_LOCATION);
+        List<List<Integer>> matrix = dataReader.readMatrix(SAMPLE_DATA_LOCATION);
+        Map<Integer, Double> costsTable = dataReader.readCostsTable(SAMPLE_DATA_LOCATION);
 
         TerritoryMap territoryMap = new TerritoryMap();
         territoryMap.initialize(matrix, costsTable);

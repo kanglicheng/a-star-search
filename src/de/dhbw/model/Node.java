@@ -14,7 +14,7 @@ public class Node {
     private int yCoordinate;
     private double gValue;
     private double fValue;
-    private int kValue;
+    private double kValue;
     private List<Node> path;
 
     public Node(int xCoordinate, int yCoordinate) {
@@ -83,7 +83,7 @@ public class Node {
      *
      * @return kValue
      */
-    public int getKValue() {
+    public double getKValue() {
         return kValue;
     }
 
@@ -92,7 +92,7 @@ public class Node {
      *
      * @param kValue
      */
-    public void setKValue(int kValue) {
+    public void setKValue(Double kValue) {
         this.kValue = kValue;
     }
 

@@ -20,27 +20,43 @@ public class DataReader {
      *
      * @param fileLocation
      *            The path to the .csv file that contains the matrix and the costs table
-     * @return matrix List of Lists of {@link Node} objects that represents raw matrix
+     * @return matrix List of Lists of Integers that represents raw matrix with the description code values
      * @throws IOException
      *             if the file cannot be opened
      */
-    public List<List<String>> readMatrix(String fileLocation) throws IOException {
+    public List<List<Integer>> readMatrix(String fileLocation) throws IOException {
         File file = new File(fileLocation);
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        List<List<String>> matrix = new ArrayList<>();
+        List<List<Integer>> matrix = new ArrayList<>();
 
         // Read the matrix
         // The semicolon line indicates the end of the matrix.
         String line;
         while ((line = reader.readLine()) != null && line.charAt(0) != ';') {
-            matrix.add(Arrays.asList(line.split(";")));
+            List<Integer> convertedLine = this.convertListFromStringToInteger(Arrays.asList(line.split(";")));
+            matrix.add(convertedLine);
         }
         reader.close();
         return matrix;
     }
 
     /**
-     * Extracts the costs table of a .csv file.
+     * Converts a list with string values to a list with integer values
+     *
+     * @param strings
+     *            a list with string values
+     * @return integers a list with integer values
+     */
+    private List<Integer> convertListFromStringToInteger(List<String> strings) {
+        List<Integer> integers = new ArrayList<>();
+        for (String entry : strings) {
+            integers.add(Integer.parseInt(entry));
+        }
+        return integers;
+    }
+
+    /**
+     * Extracts the costs table of a .csv file. A costs table maps the code of the description matrix to its costs.
      *
      * @param fileLocation
      *            The path to the .csv file that contains the matrix and the costs table
@@ -48,10 +64,10 @@ public class DataReader {
      * @throws IOException
      *             if the file cannot be opened
      */
-    public Map<Integer, Integer> readCostsTable(String fileLocation) throws IOException {
+    public Map<Integer, Double> readCostsTable(String fileLocation) throws IOException {
         File file = new File(fileLocation);
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        Map<Integer, Integer> costsTable = new HashMap<>();
+        Map<Integer, Double> costsTable = new HashMap<>();
 
         // Step over the matrix
         String line;
@@ -65,7 +81,7 @@ public class DataReader {
         // Read necessary information of the costs table
         while ((line = reader.readLine()) != null) {
             String[] row = line.split(";");
-            costsTable.put(Integer.parseInt(row[0]), Integer.parseInt(row[2]));
+            costsTable.put(Integer.parseInt(row[0]), Double.parseDouble(row[2]));
         }
 
         reader.close();

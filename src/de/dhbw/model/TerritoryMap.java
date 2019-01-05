@@ -33,7 +33,7 @@ public class TerritoryMap {
      *            maps the description code of the matrix to its costs
      * @return an array with the final territory map
      */
-    public Node[][] initialize(List<List<String>> matrix, Map<Integer, Integer> costsTable) {
+    public Node[][] initialize(List<List<Integer>> matrix, Map<Integer, Double> costsTable) {
         this.height = matrix.size();
         this.width = matrix.get(0).size();
 
@@ -41,7 +41,7 @@ public class TerritoryMap {
         for (int i = 0; i < territoryMap.length; i++) {
             for (int j = 0; j < territoryMap[i].length; j++) {
                 territoryMap[j][i] = new Node(i + 1, j + 1);
-                territoryMap[j][i].setKValue(costsTable.get(Integer.parseInt(matrix.get(j).get(i))));
+                territoryMap[j][i].setKValue(costsTable.get(matrix.get(j).get(i)));
             }
         }
         this.territoryMap = territoryMap;
@@ -84,6 +84,14 @@ public class TerritoryMap {
         }
     }
 
+    /**
+     * Checks whether a node is within the bound of the territory map.
+     *
+     * @param startNode
+     *            the node that should be checked
+     * @throws NodeOutOfBoundsException
+     *             if the node is not within the bounds of the territory map
+     */
     public void checkNodeMembership(Node startNode) throws NodeOutOfBoundsException {
         if (startNode.getXCoordinate() < 1 || startNode.getXCoordinate() > this.width) {
             throw new NodeOutOfBoundsException("The node is out of the bounds of the TerritoryMap " + startNode);
@@ -93,11 +101,18 @@ public class TerritoryMap {
         }
     }
 
-    public void checkNodeMembership(List<Node> terminalNodes) throws NodeOutOfBoundsException {
-        for (Node node : terminalNodes) {
+    /**
+     * Checks whether a list of nodes is within the bound of the territory map.
+     *
+     * @param nodes
+     *            the nodes that should be checked
+     * @throws NodeOutOfBoundsException
+     *             if one of the nodes is not within the bounds of the territory map
+     */
+    public void checkNodeMembership(List<Node> nodes) throws NodeOutOfBoundsException {
+        for (Node node : nodes) {
             this.checkNodeMembership(node);
         }
-
     }
 
 }
