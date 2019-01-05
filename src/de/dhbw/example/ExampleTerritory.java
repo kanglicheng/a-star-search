@@ -14,9 +14,6 @@ import de.dhbw.model.TerritoryMap;
 public class ExampleTerritory {
 
     private static final String SAMPLE_DATA_LOCATION = "resources/S_011_Daten.csv";
-    private static final Node START_NODE = new Node(10, 5);
-    private static final Node TERMINAL_NODE = new Node(4, 9);
-    private static final List<Node> TERMINAL_NODES = Arrays.asList(TERMINAL_NODE);
 
     /**
      * Runs the A*-Algorithm for some sample data.
@@ -30,17 +27,31 @@ public class ExampleTerritory {
         territoryMap.initialize(matrix, costsTable);
 
         AStar aStar = new AStar();
-        List<Node> path = aStar.run(territoryMap, START_NODE, TERMINAL_NODES);
 
-        System.out.println("Path: " + path);
-        System.out.println("Path Length: " + path.get(path.size() - 1).getGValue());
-        System.out.println("Number of Steps: " + (path.size() - 1));
+        Node startNode1 = new Node(10, 5);
+        Node terminalNode1 = new Node(4, 9);
+        List<Node> terminalNodes1 = Arrays.asList(terminalNode1);
 
-        path = aStar.run(territoryMap, START_NODE, TERMINAL_NODES);
+        System.out.println("1. Path from " + startNode1 + " to " + terminalNode1 + ":");
 
-        System.out.println("Path: " + path);
-        System.out.println("Path Length: " + path.get(path.size() - 1).getGValue());
-        System.out.println("Number of Steps: " + (path.size() - 1));
+        List<Node> path1 = aStar.run(territoryMap, startNode1, terminalNodes1);
 
+        System.out.println("Path: " + path1);
+        System.out.println("Path Length: " + path1.get(path1.size() - 1).getGValue());
+        System.out.println("Number of Steps: " + (path1.size() - 1));
+
+        System.out.println();
+
+        Node startNode2 = new Node(15, 5);
+        Node terminalNode2 = new Node(1, 15);
+        List<Node> terminalNodes2 = Arrays.asList(terminalNode2);
+
+        System.out.println("2. Path from " + startNode2 + " to " + terminalNode2 + ":");
+
+        List<Node> path2 = aStar.run(territoryMap, startNode2, terminalNodes2);
+
+        System.out.println("Path: " + path2);
+        System.out.println("Path Length: " + path2.get(path2.size() - 1).getGValue());
+        System.out.println("Number of Steps: " + (path2.size() - 1));
     }
 }
