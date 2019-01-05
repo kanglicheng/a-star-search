@@ -1,4 +1,4 @@
-package model;
+package de.dhbw.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +125,24 @@ public class Node {
         double b = Math.abs(terminalNode.yCoordinate - this.yCoordinate) + 1;
         this.hValue = Math.sqrt(a * a + b * b);
         this.fValue = this.gValue + this.hValue;
+    }
+
+    /**
+     * Resets the node by setting the g, h and f value to zero and resets the path.
+     */
+    public void reset() {
+        this.gValue = 0;
+        this.hValue = 0;
+        this.fValue = 0;
+        this.resetPath();
+    }
+
+    /**
+     * Resets the path by removing all nodes and add only this
+     */
+    private void resetPath() {
+        this.path.clear();
+        this.path.add(this);
     }
 
     @Override

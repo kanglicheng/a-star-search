@@ -1,16 +1,17 @@
-package pathFinder;
+package de.dhbw.astar;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import model.Node;
+import de.dhbw.model.Node;
+import de.dhbw.model.TerritoryMap;
 
 /**
  * The PathFinder receives an array with the territory map, a start node and a terminal node to calculate the shortest
  * path from the start node to the terminal node.
  */
-public class PathFinder {
+public class AStar {
 
     /**
      * Finds the shortest path from a start node to a terminal node.
@@ -24,10 +25,13 @@ public class PathFinder {
      * @return a list of {@link Node} objects that represents the shortest path. If no path is found, an empty list is
      *         returned.
      */
-    public List<Node> findPath(Node[][] territoryMap, Node startNode, Node terminalNode) {
+    public List<Node> run(TerritoryMap territoryMap, Node startNode, Node terminalNode) {
+
+        territoryMap.reset(); // Make sure the territory map does not contain junk data
+
         List<Node> openList = new ArrayList<>();
-        openList.add(startNode);
         List<Node> closedList = new ArrayList<>();
+        openList.add(startNode);
         startNode.calculateHValue(terminalNode);
 
         while (!openList.isEmpty()) {
@@ -40,7 +44,7 @@ public class PathFinder {
                 return optimalNode.getPath();
             }
             double factor = calculatePathFactor(optimalNode.getPath());
-            for (Node successor : calculateSuccessors(territoryMap, optimalNode)) {
+            for (Node successor : territoryMap.getNeighbours(optimalNode)) {
                 double gValue = optimalNode.getGValue() + successor.getKValue() * factor;
                 if (!openList.contains(successor) && !closedList.contains(successor)) {
                     openList.add(successor);
@@ -73,35 +77,6 @@ public class PathFinder {
             pathLength -= 5;
         }
         return factor;
-    }
-
-    /**
-     * Calculates all successors for a certain {@link Node}.
-     *
-     * @param territoryMap
-     *            the whole territory
-     * @param node
-     *            the {@link Node} whose successors should be calculated
-     * @return a list of all successors
-     */
-    private List<Node> calculateSuccessors(Node[][] territoryMap, Node node) {
-        int hight = territoryMap.length;
-        int width = territoryMap[0].length;
-        List<Node> successors = new ArrayList<>();
-
-        if (node.getXCoordinate() + 1 <= width) {
-            successors.add(territoryMap[node.getYCoordinate() - 1][node.getXCoordinate()]);
-        }
-        if (node.getXCoordinate() - 1 >= 1) {
-            successors.add(territoryMap[node.getYCoordinate() - 1][node.getXCoordinate() - 2]);
-        }
-        if (node.getYCoordinate() + 1 <= hight) {
-            successors.add(territoryMap[node.getYCoordinate()][node.getXCoordinate() - 1]);
-        }
-        if (node.getYCoordinate() - 1 >= 1) {
-            successors.add(territoryMap[node.getYCoordinate() - 2][node.getXCoordinate() - 1]);
-        }
-        return successors;
     }
 
     /**
