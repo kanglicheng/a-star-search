@@ -9,16 +9,17 @@ import de.dhbw.model.Node;
 import de.dhbw.model.TerritoryMap;
 
 /**
- * The PathFinder receives an array with the territory map, a start node and a terminal node to calculate the shortest
- * path from the start node to the terminal node.
+ * The AStar class represents the implementation of the A*-Algorithm. Its run()-method receives an array with the
+ * {@link TerritoryMap}, a start {@link Node} and a list of terminal {@link Node}s to calculate the shortest path from
+ * the start {@link Node} to the terminal {@link Node}s.
  */
 public class AStar {
 
     /**
-     * Finds the shortest path from a start node to a terminal node.
+     * Finds the shortest path from a start {@link Node} to a terminal {@link Node}s.
      *
      * @param territoryMap
-     *            an array with the territory map
+     *            an array with the {@link TerritoryMap}
      * @param startNode
      *            a {@link Node} that represents the start
      * @param terminalNode
@@ -26,7 +27,7 @@ public class AStar {
      * @return a list of {@link Node} objects that represents the shortest path. If no path is found, an empty list is
      *         returned.
      * @throws NodeOutOfBoundsException
-     *             if one of the inserted nodes is not within the bounds of the territory map
+     *             if one of the inserted {@link Node}s is not within the bounds of the {@link TerritoryMap}
      */
     public List<Node> run(TerritoryMap territoryMap, Node startNode, List<Node> terminalNodes)
         throws NodeOutOfBoundsException {
@@ -73,17 +74,17 @@ public class AStar {
     }
 
     /**
-     * Estimates the costs from the current node to the terminalNodes by calculating a heuristic function h for each
-     * terminal node and selecting the smallest value.
+     * Estimates the costs from a origin {@link Node} to a list of destination {@link Node}s by calculating a heuristic
+     * function h for each {@link Node} of the list and selecting the smallest value.
      *
-     * @param currentNode
-     * @param terminalNodes
-     * @return hValue the estimated costs from the current node to the terminal nodes
+     * @param originNode
+     * @param destinationNodes
+     * @return the estimated costs from the originNode to the destinationNodes
      */
-    private double estimateCosts(Node currentNode, List<Node> terminalNodes) {
+    private double estimateCosts(Node originNode, List<Node> destinationNodes) {
         double hValue = 0;
-        for (Node terminalNode : terminalNodes) {
-            double x = this.estimateCosts(currentNode, terminalNode);
+        for (Node destinationNode : destinationNodes) {
+            double x = this.estimateCosts(originNode, destinationNode);
             if (x < hValue) {
                 hValue = x;
             }
@@ -92,24 +93,25 @@ public class AStar {
     }
 
     /**
-     * Estimates the costs from currentNode to terminalNode by calculating a heuristic function h with the the aid of
-     * the Pythagoras' theorem.
+     * Estimates the costs from a origin {@link Node} to a destination {@link Node} by calculating a heuristic function
+     * h with the the aid of the Pythagoras' theorem.
      *
-     * @param currentNode
-     * @param terminalNode
-     * @return hValue the estimated costs from the current node to the terminal node
+     * @param originNode
+     * @param destinationNode
+     * @return the estimated costs from the originNode to the destinationNode
      */
-    private double estimateCosts(Node currentNode, Node terminalNode) {
-        double a = Math.abs(currentNode.getXCoordinate() - terminalNode.getXCoordinate()) + 1;
-        double b = Math.abs(currentNode.getYCoordinate() - terminalNode.getYCoordinate()) + 1;
+    private double estimateCosts(Node originNode, Node destinationNode) {
+        double a = Math.abs(originNode.getXCoordinate() - destinationNode.getXCoordinate()) + 1;
+        double b = Math.abs(originNode.getYCoordinate() - destinationNode.getYCoordinate()) + 1;
         double hValue = Math.sqrt(a * a + b * b);
         return hValue;
     }
 
     /**
-     * Calculates the factor to increase the costs of the path by 10% after each 5 nodes.
+     * Calculates the factor to increase the costs of the path by 10% after each 5 {@link Node}s.
      *
-     * @param node
+     * @param path
+     *            a list of {@link Node}s that represent the walked path
      * @return the factor
      */
     private double calculatePathFactor(List<Node> path) {
@@ -126,7 +128,7 @@ public class AStar {
      * Determines the {@link Node} with the lowest f value.
      *
      * @param openList
-     *            the list with all open nodes
+     *            the list with all open {@link Node}s
      * @return the {@link Node} with the lowest f value
      */
     private Node getNodeWithLowestFValue(List<Node> openList) {

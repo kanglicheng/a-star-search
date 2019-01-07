@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A Node represents a single field in the territory map. A node can be determined by its x and y coordinates.
- * Furthermore, there are fields for the g, k, h and f values that are necessary to find the best path in a territory
- * map.
+ * A Node represents a single field that can be used in the {@link TerritoryMap}. A node can be determined by its x and
+ * y coordinates. Furthermore, there are fields for the g, k, h and f values that are necessary to find the best path in
+ * a {@link TerritoryMap}.
  */
 public class Node {
 

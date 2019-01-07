@@ -7,7 +7,8 @@ import java.util.Map;
 import de.dhbw.exceptions.NodeOutOfBoundsException;
 
 /**
- * A territory map basically consists of an array of Nodes that represents the whole territory.
+ * A territory map basically consists of an two-dimensional array of {@link Node} objects that represents the whole
+ * territory.
  */
 public class TerritoryMap {
 
@@ -74,7 +75,7 @@ public class TerritoryMap {
     }
 
     /**
-     * Resets the territory map to its original appearance by reseting each node.
+     * Resets the territory map to its original appearance by reseting each {@link Node}.
      */
     public void reset() {
         for (Node[] nodes : territoryMap) {
@@ -85,12 +86,12 @@ public class TerritoryMap {
     }
 
     /**
-     * Checks whether a node is within the bound of the territory map.
+     * Checks whether a {@link Node} is within the bound of the territory map.
      *
      * @param startNode
-     *            the node that should be checked
+     *            the {@link Node} that should be checked
      * @throws NodeOutOfBoundsException
-     *             if the node is not within the bounds of the territory map
+     *             if the {@link Node} is not within the bounds of the territory map
      */
     public void checkNodeMembership(Node startNode) throws NodeOutOfBoundsException {
         if (startNode.getXCoordinate() < 1 || startNode.getXCoordinate() > this.width) {
@@ -102,12 +103,12 @@ public class TerritoryMap {
     }
 
     /**
-     * Checks whether a list of nodes is within the bound of the territory map.
+     * Checks whether a list of {@link Node} objects is within the bound of the territory map.
      *
      * @param nodes
-     *            the nodes that should be checked
+     *            the {@link Node} objects that should be checked
      * @throws NodeOutOfBoundsException
-     *             if one of the nodes is not within the bounds of the territory map
+     *             if one of the {@link Node} objects is not within the bounds of the territory map
      */
     public void checkNodeMembership(List<Node> nodes) throws NodeOutOfBoundsException {
         for (Node node : nodes) {

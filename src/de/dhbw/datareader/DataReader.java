@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The TerritoryParser is used to read a .csv file of a description matrix of a territory and its related costs table.
+ * The TerritoryParser is used to read a .csv file from a description matrix of a territory and its related costs table.
  */
 public class DataReader {
 
     /**
-     * Extracts the matrix of a .csv file.
+     * Extracts the matrix from a .csv file.
      *
      * @param fileLocation
      *            The path to the .csv file that contains the matrix and the costs table
-     * @return matrix List of Lists of Integers that represents raw matrix with the description code values
+     * @return a list of lists of Integers that represents raw matrix with the description code values
      * @throws IOException
      *             if the file cannot be opened
      */
@@ -45,7 +45,7 @@ public class DataReader {
      *
      * @param strings
      *            a list with string values
-     * @return integers a list with integer values
+     * @return a list with integer values
      */
     private List<Integer> convertListFromStringToInteger(List<String> strings) {
         List<Integer> integers = new ArrayList<>();
@@ -56,11 +56,11 @@ public class DataReader {
     }
 
     /**
-     * Extracts the costs table of a .csv file. A costs table maps the code of the description matrix to its costs.
+     * Extracts the costs table from a .csv file. A costs table maps the code of the description matrix to its costs.
      *
      * @param fileLocation
      *            The path to the .csv file that contains the matrix and the costs table
-     * @return costsTable a map that maps the code of the description matrix to its costs
+     * @return a map that maps the code of the description matrix to its costs
      * @throws IOException
      *             if the file cannot be opened
      */
@@ -78,7 +78,7 @@ public class DataReader {
         // Ignore the header of the costs table
         reader.readLine();
 
-        // Read necessary information of the costs table
+        // Read necessary information from the costs table
         while ((line = reader.readLine()) != null) {
             String[] row = line.split(";");
             costsTable.put(Integer.parseInt(row[0]), Double.parseDouble(row[2]));
