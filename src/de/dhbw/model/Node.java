@@ -140,7 +140,7 @@ public class Node {
     /**
      * Resets the path by removing all nodes and add only this
      */
-    private void resetPath() {
+    public void resetPath() {
         this.path.clear();
         this.path.add(this);
     }

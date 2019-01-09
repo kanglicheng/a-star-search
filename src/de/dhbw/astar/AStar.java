@@ -63,6 +63,7 @@ public class AStar {
                     successor.setFValue(fValue);
                 } else if (openList.contains(successor) && !closedList.contains(successor)
                     && gValue < successor.getGValue()) {
+                    successor.resetPath();
                     successor.addToPath(optimalNode.getPath());
                     successor.setGValue(gValue);
                     successor.setFValue(fValue);

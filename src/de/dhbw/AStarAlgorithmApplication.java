@@ -49,7 +49,7 @@ public class AStarAlgorithmApplication {
         List<Node> path = aStar.run(territoryMap, startNode, terminalNodes);
 
         System.out.println("Path: " + path);
-        System.out.println("Path Length: " + path.get(path.size() - 1).getGValue());
+        System.out.println("Total Costs: " + path.get(path.size() - 1).getGValue());
         System.out.println("Number of Steps: " + (path.size() - 1));
     }
 
