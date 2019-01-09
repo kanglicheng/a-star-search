@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.dhbw.exceptions.InvalidNodeException;
 import de.dhbw.exceptions.NodeOutOfBoundsException;
 
 /**
  * A territory map basically consists of an two-dimensional array of {@link Node} objects that represents the whole
- * territory.
+ * territory. The coordinates of the {@link Node} objects start at x = 1 and y = 1;
  */
 public class TerritoryMap {
 
@@ -26,15 +27,19 @@ public class TerritoryMap {
     }
 
     /**
-     * Creates the final territory map of the description matrix and the costs table.
+     * Creates the final territory map of the description matrix and the costs table. The coordinates of the
+     * {@link Node} objects start at x = 1 and y = 1;
      *
      * @param matrix
      *            the raw matrix
      * @param costsTable
      *            maps the description code of the matrix to its costs
      * @return an array with the final territory map
+     * @throws InvalidNodeException
+     *             thrown if a {@link Node} has not-positive coordinates.
      */
-    public Node[][] initialize(List<List<Integer>> matrix, Map<Integer, Double> costsTable) {
+    public Node[][] initialize(List<List<Integer>> matrix, Map<Integer, Double> costsTable)
+        throws InvalidNodeException {
         this.height = matrix.size();
         this.width = matrix.get(0).size();
 

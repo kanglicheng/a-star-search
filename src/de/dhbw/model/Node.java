@@ -3,6 +3,8 @@ package de.dhbw.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dhbw.exceptions.InvalidNodeException;
+
 /**
  * A Node represents a single field that can be used in the {@link TerritoryMap}. A node can be determined by its x and
  * y coordinates. Furthermore, there are fields for the g, k, h and f values that are necessary to find the best path in
@@ -17,7 +19,10 @@ public class Node {
     private double kValue;
     private List<Node> path;
 
-    public Node(int xCoordinate, int yCoordinate) {
+    public Node(int xCoordinate, int yCoordinate) throws InvalidNodeException {
+        if (xCoordinate < 1 || yCoordinate < 1) {
+            throw new InvalidNodeException("Only nodes with positive coordinates allowed!");
+        }
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.path = new ArrayList<>();

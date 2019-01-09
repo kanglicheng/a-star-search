@@ -7,7 +7,8 @@ import java.util.Map;
 
 import de.dhbw.astar.AStar;
 import de.dhbw.datareader.DataReader;
-import de.dhbw.exceptions.InvalidArgumentFormatException;
+import de.dhbw.exceptions.InvalidArgumentException;
+import de.dhbw.exceptions.InvalidNodeException;
 import de.dhbw.exceptions.InvalidNumberOfArgumentsException;
 import de.dhbw.exceptions.NodeOutOfBoundsException;
 import de.dhbw.model.Node;
@@ -22,17 +23,19 @@ public class AStarAlgorithmApplication {
      *
      * @throws InvalidNumberOfArgumentsException
      *             thrown if the number of arguments is invalid
-     * @throws InvalidArgumentFormatException
+     * @throws InvalidArgumentException
      *             thrown if an argument has a wrong format
      * @throws IOException
      *             thrown if the requested file is not existing
      * @throws NodeOutOfBoundsException
      *             thrown if the coordinates of a {@link Node} are not matching with the coordinates of the
      *             {@link TerritoryMap}
+     * @throws InvalidNodeException
+     *             thrown if a {@link Node} has not-positive coordinates.
      */
     public static void main(String[] args)
-        throws InvalidNumberOfArgumentsException, InvalidArgumentFormatException, IOException,
-        NodeOutOfBoundsException {
+        throws InvalidNumberOfArgumentsException, InvalidArgumentException, IOException,
+        NodeOutOfBoundsException, InvalidNodeException {
 
         checkArguments(args);
 
@@ -57,11 +60,11 @@ public class AStarAlgorithmApplication {
      *            the arguments from the command line
      * @throws InvalidNumberOfArgumentsException
      *             thrown if the number of arguments is invalid
-     * @throws InvalidArgumentFormatException
+     * @throws InvalidArgumentException
      *             thrown if an argument has a wrong format
      */
     private static void checkArguments(String[] args)
-        throws InvalidNumberOfArgumentsException, InvalidArgumentFormatException {
+        throws InvalidNumberOfArgumentsException, InvalidArgumentException {
         if (args.length < MIN_NUMBER_OF_ARGUMENTS) {
             throw new InvalidNumberOfArgumentsException(
                 "At least " + MIN_NUMBER_OF_ARGUMENTS + " arguments are necessary!");
@@ -71,7 +74,7 @@ public class AStarAlgorithmApplication {
         }
 
         if (!args[0].endsWith(".csv")) {
-            throw new InvalidArgumentFormatException("The first argument should be a .csv-file!");
+            throw new InvalidArgumentException("The first argument should be a .csv-file!");
         }
     }
 
@@ -83,8 +86,10 @@ public class AStarAlgorithmApplication {
      * @return the {@link TerritoryMap}
      * @throws IOException
      *             thrown if the requested file is not existing
+     * @throws InvalidNodeException
+     *             thrown if a {@link Node} has not-positive coordinates.
      */
-    private static TerritoryMap createTerritoryMap(String[] args) throws IOException {
+    private static TerritoryMap createTerritoryMap(String[] args) throws IOException, InvalidNodeException {
         String fileLocation = args[0];
         DataReader dataReader = new DataReader();
         List<List<Integer>> matrix = dataReader.readMatrix(fileLocation);
@@ -103,15 +108,17 @@ public class AStarAlgorithmApplication {
      * @param args
      *            the arguments from the command line
      * @return the {@link Node} that represents the start node
-     * @throws InvalidArgumentFormatException
+     * @throws InvalidArgumentException
      *             thrown if an argument has a wrong format
      */
-    private static Node createStartNode(String[] args) throws InvalidArgumentFormatException {
+    private static Node createStartNode(String[] args) throws InvalidArgumentException {
         Node startNode;
         try {
             startNode = new Node(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
         } catch (NumberFormatException e) {
-            throw new InvalidArgumentFormatException("Rear arguments have to be integers!");
+            throw new InvalidArgumentException("Rear arguments have to be integers!");
+        } catch (InvalidNodeException e) {
+            throw new InvalidArgumentException(e.getMessage());
         }
         return startNode;
     }
@@ -122,10 +129,10 @@ public class AStarAlgorithmApplication {
      * @param args
      *            the arguments from the command line
      * @return a list of {@link Node}s that represents the terminal nodes
-     * @throws InvalidArgumentFormatException
+     * @throws InvalidArgumentException
      *             thrown if an argument has a wrong format
      */
-    private static List<Node> createTerminalNodes(String[] args) throws InvalidArgumentFormatException {
+    private static List<Node> createTerminalNodes(String[] args) throws InvalidArgumentException {
         List<Node> terminalNodes = new ArrayList<>();
         try {
             for (int i = 3; i < args.length; i = i + 2) {
@@ -133,7 +140,9 @@ public class AStarAlgorithmApplication {
                 terminalNodes.add(terminalNode);
             }
         } catch (NumberFormatException e) {
-            throw new InvalidArgumentFormatException("Rear arguments have to be integers!");
+            throw new InvalidArgumentException("Rear arguments have to be integers!");
+        } catch (InvalidNodeException e) {
+            throw new InvalidArgumentException(e.getMessage());
         }
         return terminalNodes;
     }
